@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="download.png" />
+    <title>xo</title>
+    <style>
+      header {
+        width: 300px;
+        display: grid;
+        grid-template-columns: 1fr 4px 1fr;
+        align-items: center;
+        column-gap: 8px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        margin-top: 65px;
+        height: 50px;
+        border-radius: 20px;
+        border: 3px solid rgb(108, 6, 190);
+      }
+
+      #x {
+        display: flex;
+        align-items: center;
+      }
+      .playerNameOne {
+        flex: 1;
+        margin-right: 15px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 18px;
+        color: orange;
+        background-color: white;
+
+        border: 2px solid rgb(255, 255, 255);
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
+
+      #O {
+        display: flex;
+        align-items: center;
+      }
+      .playerNameTwo {
+        flex: 1;
+        margin-left: 15px;
+        font-size: 18px;
+        height: 50px;
+        color: blue;
+        font-weight: 700;
+        background-color: white;
+        border: 2px solid rgb(255, 255, 255);
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+
+      #playerOneScore,
+      #playerTwoScore {
+        width: 6px;
+      }
+
+      .game-board {
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: 100px 100px 100px;
+        border: 3px solid rgb(108, 6, 190);
+      }
+      .border-top-right {
+        border-top-right-radius: 15px;
+      }
+      .border-bottom-right {
+        border-bottom-right-radius: 15px;
+      }
+      .border-bottom-left {
+        border-bottom-left-radius: 15px;
+      }
+      .border-top-left {
+        border-top-left-radius: 15px;
+      }
+      .game-board button {
+        height: 100px;
+        border: 0.5px solid rgb(108, 6, 190);
+        font-size: 80px;
+        color: orange;
+        font-weight: 700;
+        background-color: white;
+      }
+      button:hover {
+        background-color: rgb(247, 239, 239);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div id="x" onclick="selectMove('X');">
+        <button class="playerNameOne">Player one</button>
+        <div id="playerOneScore">0</div>
+      </div>
+      <div>:</div>
+      <div id="O" onclick="selectMove('O');">
+        <div id="playerTwoScore">0</div>
+        <button class="playerNameTwo">Player Two</button>
+      </div>
+    </header>
+
+    <section>
+      <div class="game-board">
+        <button class="border-top-left" id="0" onclick="makeMove('0')"></button>
+        <button id="1" onclick="makeMove('1')"></button>
+        <button
+          class="border-top-right"
+          id="2"
+          onclick="makeMove('2')"
+        ></button>
+        <button id="3" onclick="makeMove('3')"></button>
+        <button id="4" onclick="makeMove('4')"></button>
+        <button id="5" onclick="makeMove('5')"></button>
+        <button
+          class="border-bottom-left"
+          id="6"
+          onclick="makeMove('6')"
+        ></button>
+        <button id="7" onclick="makeMove('7')"></button>
+
+        <button
+          class="border-bottom-right"
+          id="8"
+          onclick="makeMove('8')"
+        ></button>
+      </div>
+      <button id="reseter" style="opacity: 0"></button>
+    </section>
+    <script>
+      // model
+      let firstMove = "X";
+      let secondMove = "O";
+      let index = 0;
+      let playerTwoScores = 0;
+      let playerOneScores = 0;
+
+      let playersMove = [, , , , , , , , ,];
+      function swapPlayers() {
+        // document.getElementById("X").style = "color: black";
+      }
+
+      function selectMove(move) {
+        swapPlayers();
+        /* firstMove = move;
+        if (firstMove === "X") {
+          secondMove = "O";
+        } else secondMove = "X";
+        */
+      }
+      function changeScore(winner) {
+        if (index <= 8) {
+          console.log(index);
+          if (index % 2 != 0) {
+            playerOneScores++;
+            document.getElementById("playerOneScore").innerHTML =
+              playerOneScores;
+            console.log("yonas");
+          } else {
+            playerTwoScores++;
+            document.getElementById("playerTwoScore").innerHTML =
+              playerTwoScores;
+            console.log("Awoke");
+          }
+        }
+      }
+
+      function storePlayersMove(id, moveTurn) {
+        playersMove[Number(id)] = moveTurn;
+      }
+      function resetPlayersMove() {
+        for (let i = 0; i < playersMove.length; i++) {
+          playersMove[i] = undefined;
+        }
+        index = 0;
+        console.log(playersMove);
+      }
+      function countMove() {
+        index++;
+      }
+
+      // view
+      function renderMove(id, moveTurn) {
+        if (moveTurn === "O") {
+          console.log("the move is " + moveTurn);
+          document.getElementById(id).style = "color: blue";
+        } else {
+          console.log("the move is " + moveTurn);
+          document.getElementById(id).style = "color: orange";
+        }
+        document.getElementById(id).innerHTML = moveTurn;
+      }
+      function discardTheGameBoard() {
+        for (let i = 0; i < playersMove.length; i++) {
+          {
+            renderMove(i, "");
+          }
+        }
+      }
+      function resetGameBoardColor() {
+        for (let i = 0; i < playersMove.length; i++) {
+          document.getElementById(i).style =
+            "background-color: rgb(255, 255, 255) ";
+        }
+      }
+      function celebrateWin(id1, id2, id3) {
+        document.getElementById(id1).style =
+          "background-color: rgb(105, 253, 6) ";
+        document.getElementById(id2).style =
+          "background-color: rgb(105, 253, 6)";
+        document.getElementById(id3).style =
+          "background-color: rgb(105, 253, 6)";
+      }
+      const restartTheGame = function () {
+        changeScore();
+        resetGameBoardColor();
+        discardTheGameBoard();
+        resetPlayersMove();
+      };
+      //control
+      function makeMove(id) {
+        console.log(playersMove[8]);
+        if (index % 2 === 0 && document.getElementById(id).innerHTML === "") {
+          storePlayersMove(id, firstMove);
+          renderMove(id, firstMove);
+          console.log("this is from first move " + index);
+          countMove();
+          if (index === 8) console.log(playersMove);
+          if (index >= 4) {
+            checkForWin(playersMove);
+          }
+        } else if (document.getElementById(id).innerHTML === "") {
+          storePlayersMove(id, secondMove);
+          renderMove(id, secondMove);
+          console.log("this is from second move " + index);
+          countMove();
+          if (index >= 5) {
+            checkForWin(playersMove);
+          }
+        }
+      }
+      function checkForWin(playersMove) {
+        if (
+          playersMove[0] === playersMove[1] &&
+          playersMove[1] === playersMove[2] &&
+          playersMove[0] != undefined
+        ) {
+          celebrateWin(0, 1, 2);
+          setTimeout(restartTheGame, 500);
+          console.log("line one checking");
+
+          return true;
+        }
+        if (
+          playersMove[3] === playersMove[4] &&
+          playersMove[4] === playersMove[5] &&
+          playersMove[3] != undefined
+        ) {
+          celebrateWin(3, 4, 5);
+          setTimeout(restartTheGame, 500);
+          console.log("line 2 checking");
+
+          return true;
+        }
+        if (
+          playersMove[6] === playersMove[7] &&
+          playersMove[7] === playersMove[8] &&
+          playersMove[6] != undefined
+        ) {
+          celebrateWin(6, 7, 8);
+          console.log("yes");
+          setTimeout(restartTheGame, 500);
+          console.log("line 3 checking");
+          return true;
+        }
+        if (
+          playersMove[0] === playersMove[3] &&
+          playersMove[3] === playersMove[6] &&
+          playersMove[0] != undefined
+        ) {
+          celebrateWin(0, 3, 6);
+          setTimeout(restartTheGame, 500);
+          console.log("line 4 checking");
+
+          return true;
+        }
+        if (
+          playersMove[1] === playersMove[4] &&
+          playersMove[4] === playersMove[7] &&
+          playersMove[1] != undefined
+        ) {
+          celebrateWin(1, 4, 7);
+          setTimeout(restartTheGame, 500);
+          console.log("line 5 checking");
+
+          return true;
+        }
+        if (
+          playersMove[2] === playersMove[5] &&
+          playersMove[5] === playersMove[8] &&
+          playersMove[2] != undefined
+        ) {
+          celebrateWin(2, 5, 8);
+          setTimeout(restartTheGame, 500);
+          console.log("line 6 checking");
+
+          return true;
+        }
+        if (
+          playersMove[0] === playersMove[4] &&
+          playersMove[4] === playersMove[8] &&
+          playersMove[0] != undefined
+        ) {
+          celebrateWin(0, 4, 8);
+          setTimeout(restartTheGame, 500);
+          console.log("line 7 checking");
+
+          return true;
+        }
+        if (
+          playersMove[2] === playersMove[4] &&
+          playersMove[4] === playersMove[6] &&
+          playersMove[2] != undefined
+        ) {
+          celebrateWin(2, 4, 6);
+          setTimeout(restartTheGame, 500);
+
+          return true;
+          console.log("line 7 checking");
+        }
+        if (index > 8) {
+          console.log(playersMove[8]);
+          setTimeout(restartTheGame, 500);
+
+          return;
+        }
+      }
+    </script>
+  </body>
+</html>
